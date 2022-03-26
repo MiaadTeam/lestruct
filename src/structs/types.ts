@@ -305,11 +305,11 @@ export function object<S extends ObjectSchema>(schema?: S): any {
 
         for (const key of knowns) {
           unknowns.delete(key);
-          yield [key, value[key], schema[key]];
+          yield [key, (value as any)[key], schema[key]];
         }
 
         for (const key of unknowns) {
-          yield [key, value[key], Never];
+          yield [key, (value as any)[key], Never];
         }
       }
     },
@@ -354,7 +354,7 @@ export function record<K extends string, V>(
     *entries(value) {
       if (isObject(value)) {
         for (const k in value) {
-          const v = value[k];
+          const v = (value as any)[k];
           yield [k, k, Key];
           yield [k, v, Value];
         }
@@ -472,7 +472,7 @@ export function type<S extends ObjectSchema>(
     *entries(value) {
       if (isObject(value)) {
         for (const k of keys) {
-          yield [k, value[k], schema[k]];
+          yield [k, (value as any)[k], schema[k]];
         }
       }
     },
