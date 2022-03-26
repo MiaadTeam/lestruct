@@ -6,7 +6,7 @@ import { Failure } from "./error.ts";
  */
 
 function isIterable<T>(x: unknown): x is Iterable<T> {
-  return isObject(x) && typeof x[Symbol.iterator] === "function";
+  return isObject(x) && typeof (x as any)[Symbol.iterator] === "function";
 }
 
 /**
@@ -139,8 +139,8 @@ export function* run<T, S>(
       !Array.isArray(value)
     ) {
       for (const key in value) {
-        if (struct.schema[key] === undefined) {
-          delete value[key];
+        if ((struct.schema as any)[key] === undefined) {
+          delete (value as any)[key];
         }
       }
     }
@@ -175,7 +175,7 @@ export function* run<T, S>(
         } else if (value instanceof Set) {
           value.add(v);
         } else if (isObject(value)) {
-          value[k] = v;
+          (value as any)[k] = v;
         }
       }
     }
